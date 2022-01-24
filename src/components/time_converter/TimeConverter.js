@@ -20,7 +20,7 @@ function TimeConverter(props) {
     const tempTime = dayjs().tz(timezone).hour(parseInt(hour)).minute(parseInt(minute));
 
     setTimes(times.map((t, i) => {
-      if(i != index){
+      if(i !== index){
 
         const newTime = tempTime.tz(t.timezone);
 
