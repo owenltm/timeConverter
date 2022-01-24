@@ -12,6 +12,7 @@ function TimeInput({index, timeValue, timezoneValue, handleChange}) {
 
   useEffect(() => {
     //console.log(dayjs().tz(timezoneValue).format());
+    //test
   }, []);
 
   useEffect(() => {
