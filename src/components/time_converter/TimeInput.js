@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -7,23 +7,6 @@ dayjs.extend(utc)
 dayjs.extend(timezone)
 
 function TimeInput({index, timeValue, zoneValue, handleChange}) {
-  useEffect(() => {
-    //console.log(dayjs().tz(zoneValue).format());
-    //test
-  }, []);
-
-  useEffect(() => {
-    //convert slider to 24hrs value
-
-    /* const newTimeValue = timeValue % 1440;
-
-    const hour = newTimeValue / 1440 * 24;
-    const minute = newTimeValue % 60;
-
-    setHourLbl(parseInt(hour) < 10 ? '0' + parseInt(hour) : parseInt(hour));
-    setMinLbl(parseInt(minute) < 10 ? '0' + parseInt(minute) : parseInt(minute)); */
-  }, [timeValue]);
-
   const onZoneChange = (e) => {
     
   }
@@ -42,7 +25,7 @@ function TimeInput({index, timeValue, zoneValue, handleChange}) {
     const hour = slider / 1440 * 24;
     const minute = slider % 60;
 
-    return dayjs().tz(zoneValue).hour(parseInt(hour)).minute(parseInt(minute));
+    return dayjs(timeValue).tz(zoneValue).hour(parseInt(hour)).minute(parseInt(minute));
   }
 
   return (
