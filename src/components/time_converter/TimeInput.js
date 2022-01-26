@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -7,14 +7,46 @@ dayjs.extend(utc)
 dayjs.extend(timezone)
 
 function TimeInput({index, timeValue, zoneValue, handleChange}) {
+  const [skyRGB, setSkyRGB] = useState("");
+
+  const day = [56, 189, 248];
+  const night = [12, 74, 110];
+
+  useEffect(() => {
+    calculateSky(timestampToSlider(timeValue))
+  }, [timeValue])
+
   const onZoneChange = (e) => {
     
   }
 
   const onTimeChange = (e) => {
-    const sliderValue = e.target.value
+    const sliderValue = e.target.value;
     
     handleChange(index, zoneValue, sliderToTimestamp(sliderValue));
+  }
+
+  const calculateSky = (slider) => {
+    const mid = 1440 / 2;
+
+    //count difference
+    let diff = slider - mid;
+    if(diff < 0) diff *= -1; //make sure value is positive
+
+    //count percentage of day (00.00 = 100%, 12.00 = 0%)
+    let percentage = diff/mid * 100;
+
+    console.log(percentage);
+
+    const baseRGB = [56, 189, 248];
+    const rgbDiff = [44, 115, 138];
+
+    //count rgb diff
+    const skyRGB = baseRGB.map((val, id) => {
+      return val -= percentage/100 * rgbDiff[id];
+    })
+
+    setSkyRGB(skyRGB);
   }
 
   const timestampToSlider = (timestamp) => {
@@ -29,7 +61,7 @@ function TimeInput({index, timeValue, zoneValue, handleChange}) {
   }
 
   return (
-    <div className='flex-1 flex flex-col bg-blue-400'>
+    <div className='flex-1 flex flex-col' style={{ backgroundColor: 'rgb(' + skyRGB[0] + ',' + skyRGB[1]+ ',' + skyRGB[2] + ')' }}>
       <div className='flex justify-center py-4'>
         <input className='p-2 rounded-md text-center' type='text' value={zoneValue} onChange={onZoneChange} />
       </div>
