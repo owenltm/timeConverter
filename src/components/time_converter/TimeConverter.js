@@ -1,37 +1,32 @@
 import React, { useState } from 'react';
 import dayjs from 'dayjs';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
 
 import TimeInput from './TimeInput';
+
+dayjs.extend(advancedFormat)
 
 function TimeConverter(props) {
   const [times, setTimes] = useState([{
     timezone: "Asia/Singapore",
-    time: 0
+    time: dayjs().tz("Asia/Singapore")
   }, {
     timezone: "PST8PDT",
-    time: 0
+    time: dayjs().tz("PST8PDT")
   }])
 
   const handleChange = (index, timezone, value) => {
-
-    const hour = value / 1440 * 24;
-    const minute = value % 60;
-
-    const tempTime = dayjs().tz(timezone).hour(parseInt(hour)).minute(parseInt(minute));
+    const tempTime = dayjs(value).tz(timezone);
 
     setTimes(times.map((t, i) => {
-      if(i !== index){
-
-        const newTime = tempTime.tz(t.timezone);
-
-        return {
+      if(i !== index){        return {
           ...t,
-          time: (newTime.hour() * 60) + newTime.minute()
+          time: tempTime.tz(t.timezone)
         }
       } else {
         return {
           ...t,
-          time: parseInt(value)
+          time: value
         };
       }
     }))
@@ -43,7 +38,7 @@ function TimeConverter(props) {
     <div className='flex h-screen'>
       {
         times.map((time, index) => 
-          <TimeInput key={index} index={index} timeValue={time.time} timezoneValue={time.timezone} handleChange={handleChange} />
+          <TimeInput key={index} index={index} timeValue={time.time} zoneValue={time.timezone} handleChange={handleChange} />
         )
       }
     </div>
