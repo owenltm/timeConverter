@@ -9,8 +9,8 @@ dayjs.extend(timezone)
 function TimeInput({index, timeValue, zoneValue, handleChange}) {
   const [skyRGB, setSkyRGB] = useState("");
 
-  const day = [56, 189, 248];
-  const night = [12, 74, 110];
+  /* const day = [56, 189, 248];
+  const night = [12, 74, 110]; */
 
   useEffect(() => {
     calculateSky(timestampToSlider(timeValue))
