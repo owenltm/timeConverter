@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { PlusIcon } from '@heroicons/react/solid';
 import dayjs from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 

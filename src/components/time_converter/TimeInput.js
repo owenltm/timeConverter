@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { PlusIcon } from '@heroicons/react/solid';
+import { PlusIcon } from '@heroicons/react/outline';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -63,11 +63,18 @@ function TimeInput({index, timeValue, zoneValue, handleChange}) {
   }
 
   return (
-    <div className='flex-1'>
-      <div className='add-time-btn absolute inset-y-1/2'>
-        <button className='p-2 bg-white rounded-full' onClick={() => console.log("BRUH")}>
-          <PlusIcon className="h-8 w-8 text-gray-800"/>
-        </button>
+    <div className='time-input flex-1 relative'>
+      <div className='add-time-btn-container absolute inset-y-1/4 h-1/2 w-full flex justify-between items-center'>
+        <div className='add-time-btn-left py-24 px-1 -ml-7 opacity-0 hover:opacity-100'>
+          <button className='p-2 bg-white rounded-full' onClick={() => console.log("BRUH")}>
+            <PlusIcon className="h-8 w-8 text-gray-800"/>
+          </button>
+        </div>
+        <div className='add-time-btn-right py-24 px-1 -mr-7 opacity-0 hover:opacity-100'>
+          <button className='p-2 bg-white rounded-full' onClick={() => console.log("BRUH")}>
+            <PlusIcon className="h-8 w-8 text-gray-800"/>
+          </button>
+        </div>
       </div>
       <div className='flex flex-col h-full' style={{ backgroundColor: 'rgb(' + skyRGB[0] + ',' + skyRGB[1]+ ',' + skyRGB[2] + ')' }}>
         <div className='flex justify-center py-4'>
