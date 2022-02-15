@@ -52,21 +52,11 @@ function TimeConverter(props) {
 
   return (
     <div className='flex h-screen'>
-      <div className='side-btn-container px-2 bg-sky-400 flex h-screen'>
-        <button onClick={() => handleAddTime(0)}>
-          <PlusIcon className="h-12 w-12 text-white"/>
-        </button>
-      </div>
       {
         times.map((time, index) => 
           <TimeInput key={index} index={index} timeValue={time.time} zoneValue={time.timezone} handleChange={handleChange} />
         )
       }
-      <div className='side-btn-container px-2 bg-sky-400 flex h-screen'>
-        <button onClick={() => handleAddTime(1)}>
-          <PlusIcon className="h-12 w-12 text-white"/>
-        </button>
-      </div>
     </div>
   );
 }
