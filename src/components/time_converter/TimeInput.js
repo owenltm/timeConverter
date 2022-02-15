@@ -7,6 +7,8 @@ dayjs.extend(utc)
 dayjs.extend(timezone)
 
 function TimeInput({index, timeValue, zoneValue, handleTimeChange, handleZoneChange}) {
+  //timezone need local state because timezone can not be changed for parent state
+  const [timezone, setTimezone] = useState(zoneValue);
   const [skyRGB, setSkyRGB] = useState("");
 
   /* const day = [56, 189, 248];
@@ -18,6 +20,8 @@ function TimeInput({index, timeValue, zoneValue, handleTimeChange, handleZoneCha
 
   const onZoneChange = (e) => {
     const newZoneValue = e.target.value;
+
+    setTimezone(newZoneValue);
 
     handleZoneChange(index, newZoneValue, timeValue);
   }
@@ -63,7 +67,7 @@ function TimeInput({index, timeValue, zoneValue, handleTimeChange, handleZoneCha
   return (
     <div className='flex-1 flex flex-col' style={{ backgroundColor: 'rgb(' + skyRGB[0] + ',' + skyRGB[1]+ ',' + skyRGB[2] + ')' }}>
       <div className='flex justify-center py-4'>
-        <input className='p-2 rounded-md text-center' type='text' value={zoneValue} onChange={onZoneChange} />
+        <input className='p-2 rounded-md text-center' type='text' value={timezone} onChange={onZoneChange} />
       </div>
       <div className='flex-1 flex flex-col justify-evenly items-center text-white'>
         {/* <div className='bg-yellow-200 w-1/3 h-20'>
