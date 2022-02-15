@@ -6,7 +6,7 @@ import timezone from 'dayjs/plugin/timezone';
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
-function TimeInput({index, timeValue, zoneValue, handleChange}) {
+function TimeInput({index, timeValue, zoneValue, handleTimeChange, handleZoneChange}) {
   const [skyRGB, setSkyRGB] = useState("");
 
   /* const day = [56, 189, 248];
@@ -17,13 +17,15 @@ function TimeInput({index, timeValue, zoneValue, handleChange}) {
   }, [timeValue])
 
   const onZoneChange = (e) => {
-    
+    const newZoneValue = e.target.value;
+
+    handleZoneChange(index, newZoneValue, timeValue);
   }
 
   const onTimeChange = (e) => {
     const sliderValue = e.target.value;
     
-    handleChange(index, zoneValue, sliderToTimestamp(sliderValue));
+    handleTimeChange(index, zoneValue, sliderToTimestamp(sliderValue));
   }
 
   const calculateSky = (slider) => {
@@ -35,8 +37,6 @@ function TimeInput({index, timeValue, zoneValue, handleChange}) {
 
     //count percentage of day (00.00 = 100%, 12.00 = 0%)
     let percentage = diff/mid * 100;
-
-    console.log(percentage);
 
     const baseRGB = [56, 189, 248];
     const rgbDiff = [44, 115, 138];
