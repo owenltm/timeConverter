@@ -27,6 +27,14 @@ function TimeConverter(props) {
     setTimes(temp);
   }
 
+  const handleRemoveTime = (position) => {
+    const temp = [...times];
+
+    temp.splice(position, 1);
+
+    setTimes(temp);
+  }
+
   const handleChange = (index, timezone, value) => {
     const tempTime = dayjs(value).tz(timezone);
 
@@ -50,7 +58,14 @@ function TimeConverter(props) {
     <div className='flex h-screen'>
       {
         times && times.map((time, index) => 
-          <TimeInput key={index} index={index} timeValue={time.time} zoneValue={time.timezone} handleChange={handleChange} handleAddTime={handleAddTime} />
+          <TimeInput
+            key={index}
+            index={index}
+            timeValue={time.time}
+            zoneValue={time.timezone}
+            handleChange={handleChange}
+            handleAddTime={handleAddTime}
+            handleRemoveTime={handleRemoveTime} />
         )
       }
     </div>
