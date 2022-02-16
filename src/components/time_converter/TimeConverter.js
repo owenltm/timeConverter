@@ -14,20 +14,17 @@ function TimeConverter(props) {
   }, {
     timezone: "PST8PDT",
     time: dayjs().tz("PST8PDT")
-  }])
+  }]);
 
   const handleAddTime = (position) => {
-    if(position === 0) {
-      setTimes([{
-        timezone: "PST8PDT",
-        time: dayjs().tz("PST8PDT")
-      }, ...times])
-    } else {
-      setTimes([...times, {
-        timezone: "PST8PDT",
-        time: dayjs().tz("PST8PDT")
-      }])
-    }
+    const temp = [...times];
+
+    temp.splice(position, 0, {
+      timezone: "Asia/Bangkok",
+      time: dayjs().tz("Asia/Bangkok")
+    })
+
+    setTimes(temp);
   }
 
   const handleChange = (index, timezone, value) => {
@@ -52,8 +49,8 @@ function TimeConverter(props) {
   return (
     <div className='flex h-screen'>
       {
-        times.map((time, index) => 
-          <TimeInput key={index} index={index} timeValue={time.time} zoneValue={time.timezone} handleChange={handleChange} />
+        times && times.map((time, index) => 
+          <TimeInput key={index} index={index} timeValue={time.time} zoneValue={time.timezone} handleChange={handleChange} handleAddTime={handleAddTime} />
         )
       }
     </div>

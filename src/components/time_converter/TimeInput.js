@@ -8,7 +8,7 @@ import './TimeInput.css';
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
-function TimeInput({index, timeValue, zoneValue, handleChange}) {
+function TimeInput({index, timeValue, zoneValue, handleChange, handleAddTime}) {
   const [skyRGB, setSkyRGB] = useState("");
 
   /* const day = [56, 189, 248];
@@ -64,14 +64,28 @@ function TimeInput({index, timeValue, zoneValue, handleChange}) {
 
   return (
     <div className='time-input flex-1 relative'>
-      <div className='add-time-btn-container absolute inset-y-1/4 h-1/2 w-full flex justify-between items-center'>
-        <div className='add-time-btn-left py-24 px-1 -ml-7 opacity-0 hover:opacity-100'>
-          <button className='p-2 bg-white rounded-full' onClick={() => console.log("BRUH")}>
+      {/* <div className='add-time-btn-container absolute h-full w-full flex justify-between items-center'>
+        <div className='add-time-btn-left h-3/4 px-1 -ml-7 flex items-center opacity-0 hover:opacity-100'>
+          <button className='p-2 bg-white rounded-full' onClick={() => handleAddTime(index)}>
             <PlusIcon className="h-8 w-8 text-gray-800"/>
           </button>
         </div>
-        <div className='add-time-btn-right py-24 px-1 -mr-7 opacity-0 hover:opacity-100'>
-          <button className='p-2 bg-white rounded-full' onClick={() => console.log("BRUH")}>
+        <div className='add-time-btn-right h-3/4 px-1 -mr-7 flex items-center opacity-0 hover:opacity-100'>
+          <button className='p-2 bg-white rounded-full' onClick={() => handleAddTime(index + 1)}>
+            <PlusIcon className="h-8 w-8 text-gray-800"/>
+          </button>
+        </div>
+      </div> */}
+      <div className='add-time-btn-container absolute h-full flex items-center'>
+        <div className='add-time-btn-left h-3/4 px-1 -ml-7 flex items-center opacity-0 hover:opacity-100'>
+          <button className='p-2 bg-white rounded-full' onClick={() => handleAddTime(index)}>
+            <PlusIcon className="h-8 w-8 text-gray-800"/>
+          </button>
+        </div>
+      </div>
+      <div className='add-time-btn-container absolute h-full flex items-center right-0'>
+        <div className='add-time-btn-right h-3/4 px-1 -mr-7 flex items-center opacity-0 hover:opacity-100'>
+          <button className='p-2 bg-white rounded-full' onClick={() => handleAddTime(index + 1)}>
             <PlusIcon className="h-8 w-8 text-gray-800"/>
           </button>
         </div>
