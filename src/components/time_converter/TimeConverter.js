@@ -16,8 +16,6 @@ function TimeConverter(props) {
   }])
 
   const handleZoneChange = (index, timezone, value) => {
-    console.log(index, timezone, value);
-
     const tempTime = value.tz(timezone);
 
     setTimes(times.map((t, i) => {

@@ -9,6 +9,8 @@ dayjs.extend(timezone)
 function TimeInput({index, timeValue, zoneValue, handleTimeChange, handleZoneChange}) {
   //timezone need local state because timezone can not be changed for parent state
   const [timezone, setTimezone] = useState(zoneValue);
+  const [autocompletes, setAutocompletes] = useState([]);
+  const [currentFocus, setCurrentFocus] = useState(0);
   const [skyRGB, setSkyRGB] = useState("");
 
   /* const day = [56, 189, 248];
@@ -23,6 +25,10 @@ function TimeInput({index, timeValue, zoneValue, handleTimeChange, handleZoneCha
 
     setTimezone(newZoneValue);
 
+    console.log("onChange");
+
+    updateAutocomplete(newZoneValue);
+
     handleZoneChange(index, newZoneValue, timeValue);
   }
 
@@ -30,6 +36,38 @@ function TimeInput({index, timeValue, zoneValue, handleTimeChange, handleZoneCha
     const sliderValue = e.target.value;
     
     handleTimeChange(index, zoneValue, sliderToTimestamp(sliderValue));
+  }
+
+  const tz = ["Australia/Queensland", "Canada/Saskatchewan", "Europe/Malta", "Europe/Ljubljana", "Mexico/BajaNorte"];
+  const updateAutocomplete = (zoneValue) => {
+    if(zoneValue === "") {
+      setAutocompletes([]);
+    } else {
+      //fix case matching
+      setAutocompletes(tz.filter((item) => item.indexOf(zoneValue) > -1));
+    }
+  }
+
+  const onKeyDown = (e) => {
+    var newFocus = 0 + currentFocus;
+    if(e.keyCode === 40){
+      //down arrow
+      newFocus = currentFocus + 1;
+    } else if (e.keyCode === 38){
+      //up arrow
+      newFocus = currentFocus - 1;
+    } else if (e.keyCode === 13){
+      //enter
+      newFocus = 0;
+    }
+
+    if(newFocus < 0){
+      newFocus = autocompletes.length - 1;
+    } else if(newFocus >= autocompletes.length){
+      newFocus = 0;
+    }
+
+    setCurrentFocus(newFocus);
   }
 
   const calculateSky = (slider) => {
@@ -66,8 +104,13 @@ function TimeInput({index, timeValue, zoneValue, handleTimeChange, handleZoneCha
 
   return (
     <div className='flex-1 flex flex-col' style={{ backgroundColor: 'rgb(' + skyRGB[0] + ',' + skyRGB[1]+ ',' + skyRGB[2] + ')' }}>
-      <div className='flex justify-center py-4'>
-        <input className='p-2 rounded-md text-center' type='text' value={timezone} onChange={onZoneChange} />
+      <div className='flex flex-col items-center py-4 relative'>
+        <input className='p-2 w-2/5 rounded-md text-center' type='text' value={timezone} onChange={onZoneChange} onKeyDown={onKeyDown} />
+        {autocompletes.length > 0 && <div className='autocomplete-list mt-1 w-2/5 rounded overflow-hidden text-center absolute top-16'>
+          {autocompletes.map((item, i) => <div className={'autocomplete-item py-2 hover:bg-sky-200 ' + (i === currentFocus ? "bg-sky-200" : "bg-sky-100")}>
+            <p>{item}</p>
+          </div>)}
+        </div>}
       </div>
       <div className='flex-1 flex flex-col justify-evenly items-center text-white'>
         {/* <div className='bg-yellow-200 w-1/3 h-20'>
