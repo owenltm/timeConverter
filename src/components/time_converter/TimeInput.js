@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import tzList from '../../data/timezones';
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -38,7 +39,7 @@ function TimeInput({index, timeValue, zoneValue, handleTimeChange, handleZoneCha
     handleTimeChange(index, zoneValue, sliderToTimestamp(sliderValue));
   }
 
-  const tz = ["Australia/Queensland", "Canada/Saskatchewan", "Europe/Malta", "Europe/Ljubljana", "Mexico/BajaNorte"];
+  const tz = tzList;
   const updateAutocomplete = (zoneValue) => {
     if(zoneValue === "") {
       setAutocompletes([]);
@@ -59,6 +60,11 @@ function TimeInput({index, timeValue, zoneValue, handleTimeChange, handleZoneCha
     } else if (e.keyCode === 13){
       //enter
       newFocus = 0;
+      setTimezone(autocompletes[currentFocus]);
+
+      handleZoneChange(index, autocompletes[currentFocus], timeValue);
+
+      setAutocompletes([]);
     }
 
     if(newFocus < 0){
@@ -106,7 +112,7 @@ function TimeInput({index, timeValue, zoneValue, handleTimeChange, handleZoneCha
     <div className='flex-1 flex flex-col' style={{ backgroundColor: 'rgb(' + skyRGB[0] + ',' + skyRGB[1]+ ',' + skyRGB[2] + ')' }}>
       <div className='flex flex-col items-center py-4 relative'>
         <input className='p-2 w-2/5 rounded-md text-center' type='text' value={timezone} onChange={onZoneChange} onKeyDown={onKeyDown} />
-        {autocompletes.length > 0 && <div className='autocomplete-list mt-1 w-2/5 rounded overflow-hidden text-center absolute top-16'>
+        {autocompletes.length > 0 && <div className='autocomplete-list mt-1 w-2/5 max-h-60 rounded overflow-y-scroll overflow-x-hidden text-center absolute top-16'>
           {autocompletes.map((item, i) => <div className={'autocomplete-item py-2 hover:bg-sky-200 ' + (i === currentFocus ? "bg-sky-200" : "bg-sky-100")}>
             <p>{item}</p>
           </div>)}
