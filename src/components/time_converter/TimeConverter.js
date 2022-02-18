@@ -75,20 +75,16 @@ function TimeConverter(props) {
   return (
     <div className='flex h-screen'>
       {
-<<<<<<< HEAD
-        times.map((time, index) => 
-          <TimeInput key={index} index={index} timeValue={time.time} zoneValue={time.timezone} handleTimeChange={handleTimeChange} handleZoneChange={handleZoneChange} />
-=======
         times && times.map((time, index) => 
           <TimeInput
             key={index}
             index={index}
             timeValue={time.time}
             zoneValue={time.timezone}
-            handleChange={handleChange}
+            handleTimeChange={handleTimeChange}
+            handleZoneChange={handleZoneChange}
             handleAddTime={handleAddTime}
             handleRemoveTime={handleRemoveTime} />
->>>>>>> master
         )
       }
     </div>
