@@ -35,13 +35,31 @@ function TimeConverter(props) {
     setTimes(temp);
   }
 
-  const handleChange = (index, timezone, value) => {
-    const tempTime = dayjs(value).tz(timezone);
+  const handleZoneChange = (index, timezone, value) => {
+    const tempTime = value.tz(timezone);
+
+    setTimes(times.map((t, i) => {
+      if(i !== index){
+        return {
+          ...t,
+          time: tempTime.tz(t.timezone)
+        }
+      } else {
+        return {
+          timezone: timezone,
+          time: tempTime
+        };
+      }
+    }))
+  }
+
+  const handleTimeChange = (index, timezone, value) => {
+    console.log(index, timezone, value);
 
     setTimes(times.map((t, i) => {
       if(i !== index){        return {
           ...t,
-          time: tempTime.tz(t.timezone)
+          time: value.tz(t.timezone)
         }
       } else {
         return {
@@ -63,7 +81,8 @@ function TimeConverter(props) {
             index={index}
             timeValue={time.time}
             zoneValue={time.timezone}
-            handleChange={handleChange}
+            handleTimeChange={handleTimeChange}
+            handleZoneChange={handleZoneChange}
             handleAddTime={handleAddTime}
             handleRemoveTime={handleRemoveTime} />
         )

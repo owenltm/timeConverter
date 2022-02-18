@@ -3,12 +3,17 @@ import { PlusIcon, XIcon } from '@heroicons/react/outline';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import tzList from '../../data/timezones';
 import './TimeInput.css';
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
-function TimeInput({index, timeValue, zoneValue, handleChange, handleAddTime, handleRemoveTime}) {
+function TimeInput({index, timeValue, zoneValue, handleTimeChange, handleZoneChange, handleAddTime, handleRemoveTime}) {
+  //timezone need local state because timezone can not be changed for parent state
+  const [timezone, setTimezone] = useState(zoneValue);
+  const [autocompletes, setAutocompletes] = useState([]);
+  const [currentFocus, setCurrentFocus] = useState(0);
   const [skyRGB, setSkyRGB] = useState("");
 
   /* const day = [56, 189, 248];
@@ -19,13 +24,58 @@ function TimeInput({index, timeValue, zoneValue, handleChange, handleAddTime, ha
   }, [timeValue])
 
   const onZoneChange = (e) => {
-    
+    const newZoneValue = e.target.value;
+
+    setTimezone(newZoneValue);
+
+    console.log("onChange");
+
+    updateAutocomplete(newZoneValue);
+
+    handleZoneChange(index, newZoneValue, timeValue);
   }
 
   const onTimeChange = (e) => {
     const sliderValue = e.target.value;
     
-    handleChange(index, zoneValue, sliderToTimestamp(sliderValue));
+    handleTimeChange(index, zoneValue, sliderToTimestamp(sliderValue));
+  }
+
+  const tz = tzList;
+  const updateAutocomplete = (zoneValue) => {
+    if(zoneValue === "") {
+      setAutocompletes([]);
+    } else {
+      //fix case matching
+      setAutocompletes(tz.filter((item) => item.indexOf(zoneValue) > -1));
+    }
+  }
+
+  const onKeyDown = (e) => {
+    var newFocus = 0 + currentFocus;
+    if(e.keyCode === 40){
+      //down arrow
+      newFocus = currentFocus + 1;
+    } else if (e.keyCode === 38){
+      //up arrow
+      newFocus = currentFocus - 1;
+    } else if (e.keyCode === 13){
+      //enter
+      newFocus = 0;
+      setTimezone(autocompletes[currentFocus]);
+
+      handleZoneChange(index, autocompletes[currentFocus], timeValue);
+
+      setAutocompletes([]);
+    }
+
+    if(newFocus < 0){
+      newFocus = autocompletes.length - 1;
+    } else if(newFocus >= autocompletes.length){
+      newFocus = 0;
+    }
+
+    setCurrentFocus(newFocus);
   }
 
   const calculateSky = (slider) => {
@@ -37,8 +87,6 @@ function TimeInput({index, timeValue, zoneValue, handleChange, handleAddTime, ha
 
     //count percentage of day (00.00 = 100%, 12.00 = 0%)
     let percentage = diff/mid * 100;
-
-    console.log(percentage);
 
     const baseRGB = [56, 189, 248];
     const rgbDiff = [44, 115, 138];
@@ -80,7 +128,12 @@ function TimeInput({index, timeValue, zoneValue, handleChange, handleAddTime, ha
       </div>
       <div className='flex flex-col h-full' style={{ backgroundColor: 'rgb(' + skyRGB[0] + ',' + skyRGB[1]+ ',' + skyRGB[2] + ')' }}>
         <div className='flex flex-col items-center py-4'>
-          <input className='p-2 rounded-md text-center' type='text' value={zoneValue} onChange={onZoneChange} />
+          <input className='p-2 rounded-md text-center' type='text' value={timezone} onChange={onZoneChange} onKeyDown={onKeyDown} />
+          {autocompletes.length > 0 && <div className='autocomplete-list mt-1 w-2/5 max-h-60 rounded overflow-y-scroll overflow-x-hidden text-center absolute top-16'>
+            {autocompletes.map((item, i) => <div className={'autocomplete-item py-2 hover:bg-sky-200 ' + (i === currentFocus ? "bg-sky-200" : "bg-sky-100")}>
+              <p>{item}</p>
+            </div>)}
+          </div>}
           <div className='close-btn mt-6 opacity-0 hover:opacity-100'>
             <button className='p-2 bg-red-300 rounded-full' onClick={() => handleRemoveTime(index)}>
               <XIcon className="h-8 w-8 text-white" />
