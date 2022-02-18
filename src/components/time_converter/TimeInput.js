@@ -128,7 +128,7 @@ function TimeInput({index, timeValue, zoneValue, handleTimeChange, handleZoneCha
       </div>
       <div className='flex flex-col h-full' style={{ backgroundColor: 'rgb(' + skyRGB[0] + ',' + skyRGB[1]+ ',' + skyRGB[2] + ')' }}>
         <div className='flex flex-col items-center py-4'>
-          <input className='p-2 rounded-md text-center' type='text' value={zoneValue} onChange={onZoneChange} />
+          <input className='p-2 rounded-md text-center' type='text' value={timezone} onChange={onZoneChange} onKeyDown={onKeyDown} />
           {autocompletes.length > 0 && <div className='autocomplete-list mt-1 w-2/5 max-h-60 rounded overflow-y-scroll overflow-x-hidden text-center absolute top-16'>
             {autocompletes.map((item, i) => <div className={'autocomplete-item py-2 hover:bg-sky-200 ' + (i === currentFocus ? "bg-sky-200" : "bg-sky-100")}>
               <p>{item}</p>
