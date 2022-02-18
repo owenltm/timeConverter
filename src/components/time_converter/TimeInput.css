@@ -1,0 +1,7 @@
+.time-input:first-child > .add-time-btn-container > .add-time-btn-left {
+  margin-left: 1.5rem;
+}
+
+.time-input:last-child > .add-time-btn-container > .add-time-btn-right {
+  margin-right: 1.5rem;
+}

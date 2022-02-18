@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { PlusIcon, XIcon } from '@heroicons/react/outline';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import tzList from '../../data/timezones';
+import './TimeInput.css';
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
-function TimeInput({index, timeValue, zoneValue, handleTimeChange, handleZoneChange}) {
+function TimeInput({index, timeValue, zoneValue, handleTimeChange, handleZoneChange, handleAddTime, handleRemoveTime}) {
   //timezone need local state because timezone can not be changed for parent state
   const [timezone, setTimezone] = useState(zoneValue);
   const [autocompletes, setAutocompletes] = useState([]);
@@ -109,25 +111,46 @@ function TimeInput({index, timeValue, zoneValue, handleTimeChange, handleZoneCha
   }
 
   return (
-    <div className='flex-1 flex flex-col' style={{ backgroundColor: 'rgb(' + skyRGB[0] + ',' + skyRGB[1]+ ',' + skyRGB[2] + ')' }}>
-      <div className='flex flex-col items-center py-4 relative'>
-        <input className='p-2 w-2/5 rounded-md text-center' type='text' value={timezone} onChange={onZoneChange} onKeyDown={onKeyDown} />
-        {autocompletes.length > 0 && <div className='autocomplete-list mt-1 w-2/5 max-h-60 rounded overflow-y-scroll overflow-x-hidden text-center absolute top-16'>
-          {autocompletes.map((item, i) => <div className={'autocomplete-item py-2 hover:bg-sky-200 ' + (i === currentFocus ? "bg-sky-200" : "bg-sky-100")}>
-            <p>{item}</p>
-          </div>)}
-        </div>}
+    <div className='time-input flex-1 relative'>
+      <div className='add-time-btn-container absolute h-full flex items-center'>
+        <div className='add-time-btn-left h-3/4 px-1 -ml-7 flex items-center opacity-0 hover:opacity-100'>
+          <button className='p-2 bg-white rounded-full' onClick={() => handleAddTime(index)}>
+            <PlusIcon className="h-8 w-8 text-gray-800"/>
+          </button>
+        </div>
       </div>
-      <div className='flex-1 flex flex-col justify-evenly items-center text-white'>
-        {/* <div className='bg-yellow-200 w-1/3 h-20'>
-          Icon
-        </div> */}
-        <div className='w-3/4'>
-          <div className='text-center mb-5'>
-            <h1 className='text-3xl'>{timeValue.format('ddd, D MMM YY')}</h1>
-            <h2 className='text-5xl font-bold'>{timeValue.format('HH:mm')}</h2>
+      <div className='add-time-btn-container absolute h-full flex items-center right-0'>
+        <div className='add-time-btn-right h-3/4 px-1 -mr-7 flex items-center opacity-0 hover:opacity-100'>
+          <button className='p-2 bg-white rounded-full' onClick={() => handleAddTime(index + 1)}>
+            <PlusIcon className="h-8 w-8 text-gray-800"/>
+          </button>
+        </div>
+      </div>
+      <div className='flex flex-col h-full' style={{ backgroundColor: 'rgb(' + skyRGB[0] + ',' + skyRGB[1]+ ',' + skyRGB[2] + ')' }}>
+        <div className='flex flex-col items-center py-4'>
+          <input className='p-2 rounded-md text-center' type='text' value={zoneValue} onChange={onZoneChange} />
+          {autocompletes.length > 0 && <div className='autocomplete-list mt-1 w-2/5 max-h-60 rounded overflow-y-scroll overflow-x-hidden text-center absolute top-16'>
+            {autocompletes.map((item, i) => <div className={'autocomplete-item py-2 hover:bg-sky-200 ' + (i === currentFocus ? "bg-sky-200" : "bg-sky-100")}>
+              <p>{item}</p>
+            </div>)}
+          </div>}
+          <div className='close-btn mt-6 opacity-0 hover:opacity-100'>
+            <button className='p-2 bg-red-300 rounded-full' onClick={() => handleRemoveTime(index)}>
+              <XIcon className="h-8 w-8 text-white" />
+            </button>
           </div>
-          <input className='text-red-100' type='range' min={0} max={1439} value={timestampToSlider(timeValue)} onChange={onTimeChange}/>
+        </div>
+        <div className='flex-1 flex flex-col justify-evenly items-center text-white'>
+          {/* <div className='bg-yellow-200 w-1/3 h-20'>
+            Sun/Moon Icon
+          </div> */}
+          <div className='w-3/4'>
+            <div className='text-center mb-5'>
+              <h1 className='text-3xl'>{timeValue.format('ddd, D MMM YY')}</h1>
+              <h2 className='text-5xl font-bold'>{timeValue.format('HH:mm')}</h2>
+            </div>
+            <input className='text-red-100' type='range' min={0} max={1439} value={timestampToSlider(timeValue)} onChange={onTimeChange}/>
+          </div>
         </div>
       </div>
     </div>
