@@ -12,8 +12,8 @@ function TimeConverter(props) {
     timezone: "Asia/Singapore",
     time: dayjs().tz("Asia/Singapore")
   }, {
-    timezone: "PST8PDT",
-    time: dayjs().tz("PST8PDT")
+    timezone: "Asia/Jakarta",
+    time: dayjs().tz("Asia/Jakarta")
   }]);
 
   const handleAddTime = (position) => {
@@ -54,7 +54,7 @@ function TimeConverter(props) {
   }
 
   const handleTimeChange = (index, timezone, value) => {
-    console.log(index, timezone, value);
+    // console.log(index, timezone, value);
 
     setTimes(times.map((t, i) => {
       if(i !== index){        return {
